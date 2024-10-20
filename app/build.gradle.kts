@@ -1,5 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
+    //TODO: 2.3 Agregar plugin compose
+    alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
     //alias(libs.plugins.dagger.hilt)
@@ -51,11 +53,7 @@ android {
     buildFeatures {
         compose = true
     }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.14"
-    }
-
+    //TODO: 2.4 Remover configuracion gradle compilador compose
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
