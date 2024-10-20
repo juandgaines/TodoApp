@@ -17,7 +17,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            TodoAppTheme {
+            TodoAppTheme() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     HelloWorld(
                         modifier = Modifier.fillMaxSize()
