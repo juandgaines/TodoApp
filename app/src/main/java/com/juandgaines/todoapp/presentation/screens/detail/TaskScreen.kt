@@ -116,7 +116,7 @@ fun TaskScreen(
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "Back",
-                        tint = MaterialTheme.colorScheme.onSurface,
+                        tint = MaterialTheme.colorScheme.onBackground,
                         modifier = Modifier.clickable {
                             onAction(
                                 ActionTask.Back
@@ -300,9 +300,11 @@ fun TaskScreen(
             ){
                 Text(
                     text = stringResource(R.string.save),
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        color = MaterialTheme.colorScheme.onPrimary
-                    )
+                    style = MaterialTheme.typography.titleMedium,
+                    color = if (state.canSaveTask)
+                        MaterialTheme.colorScheme.onPrimary
+                    else
+                        MaterialTheme.colorScheme.onPrimaryContainer
                 )
             }
         }

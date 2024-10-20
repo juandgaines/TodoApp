@@ -50,12 +50,11 @@ import com.juandgaines.todoapp.ui.theme.TodoAppTheme
 
 @Composable
 fun HomeScreenRoot(
-    navigateToTaskScreen: () -> Unit
+    navigateToTaskScreen: (String?) -> Unit
 ) {
     val viewModel:HomeScreenViewModel = viewModel<HomeScreenViewModel>()
     val state = viewModel.state
     val event = viewModel.events
-
     val context = LocalContext.current
 
     LaunchedEffect(
@@ -79,8 +78,11 @@ fun HomeScreenRoot(
         state = state,
         onAction = { action ->
             when(action){
-                HomeScreenAction.OnAddTask->{
-                    navigateToTaskScreen()
+                is HomeScreenAction.OnAddTask->{
+                    navigateToTaskScreen(null)
+                }
+                is HomeScreenAction.OnClickTask->{
+                    navigateToTaskScreen(action.taskId)
                 }
                 else -> viewModel.onAction(action)
             }
@@ -186,7 +188,9 @@ fun HomeScreen(
                             )
                             .animateItem(),
                         task = task,
-                        onClickItem = { },
+                        onClickItem = {
+                            onAction(HomeScreenAction.OnClickTask(task.id))
+                        },
                         onDeleteItem = {
                             onAction(HomeScreenAction.OnDeleteTask(task))
                         },
@@ -219,7 +223,7 @@ fun HomeScreen(
                             .animateItem(),
                         task = task,
                         onClickItem = {
-
+                            onAction(HomeScreenAction.OnClickTask(task.id))
                         },
                         onDeleteItem = {
                             onAction(HomeScreenAction.OnDeleteTask(task))

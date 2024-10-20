@@ -3,9 +3,12 @@ package com.juandgaines.todoapp.presentation.screens.home
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.juandgaines.todoapp.data.FakeTaskLocalDataSource
+import com.juandgaines.todoapp.presentation.navigation.TaskScreenDes
 import com.juandgaines.todoapp.presentation.screens.home.HomeScreenAction.OnDeleteAllTasks
 import com.juandgaines.todoapp.presentation.screens.home.HomeScreenAction.OnDeleteTask
 import com.juandgaines.todoapp.presentation.screens.home.HomeScreenAction.OnToggleTask
@@ -17,7 +20,7 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-class HomeScreenViewModel:ViewModel() {
+class HomeScreenViewModel():ViewModel() {
 
     private val taskLocalDataSource = FakeTaskLocalDataSource
 
@@ -28,6 +31,8 @@ class HomeScreenViewModel:ViewModel() {
     val events = eventChannel.receiveAsFlow()
 
     init {
+
+
 
         state = state.copy(
             date = LocalDate.now().let {
