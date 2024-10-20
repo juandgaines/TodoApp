@@ -51,7 +51,7 @@ import com.juandgaines.todoapp.presentation.screens.detail.providers.TaskScreenS
 import com.juandgaines.todoapp.ui.theme.TodoAppTheme
 
 @Composable
-fun TaskScreenRoot(){
+fun TaskScreenRoot(navigateBack: () -> Boolean) {
     val viewModel = viewModel<TaskViewModel>()
     val state = viewModel.state
     val event = viewModel.event
@@ -67,13 +67,24 @@ fun TaskScreenRoot(){
                             context.getString(R.string.task_created),
                             Toast.LENGTH_SHORT
                         ).show()
+                        navigateBack()
                 }
             }
         }
     }
+
     TaskScreen(
         state = state,
-        onAction = viewModel::onAction
+        onAction = { action ->
+            when(action){
+                is ActionTask.Back -> {
+                    navigateBack()
+                }
+                else -> {
+                    viewModel.onAction(action)
+                }
+            }
+        }
     )
 }
 
@@ -161,11 +172,12 @@ fun TaskScreen(
                         style = MaterialTheme.typography.bodyMedium.copy(
                             color = MaterialTheme.colorScheme.onSurface
                         ),
-                        modifier = Modifier.border(
-                            width = 1.dp,
-                            color = MaterialTheme.colorScheme.outline,
-                            shape = RoundedCornerShape(8.dp)
-                        )
+                        modifier = Modifier
+                            .border(
+                                width = 1.dp,
+                                color = MaterialTheme.colorScheme.outline,
+                                shape = RoundedCornerShape(8.dp)
+                            )
                             .padding(8.dp)
                     )
                     Box (
@@ -191,15 +203,18 @@ fun TaskScreen(
                                         style = MaterialTheme.typography.bodyMedium.copy(
                                             color = MaterialTheme.colorScheme.onSurface
                                         ),
-                                        modifier = Modifier.padding(8.dp).padding(
-                                            8.dp
-                                        ).clickable {
-                                            onAction(
-                                                ActionTask.ChangeTaskCategory(
-                                                    category = category
-                                                )
+                                        modifier = Modifier
+                                            .padding(8.dp)
+                                            .padding(
+                                                8.dp
                                             )
-                                        }
+                                            .clickable {
+                                                onAction(
+                                                    ActionTask.ChangeTaskCategory(
+                                                        category = category
+                                                    )
+                                                )
+                                            }
                                     )
                                 }
                             }
@@ -279,7 +294,8 @@ fun TaskScreen(
                         ActionTask.SaveTask
                     )
                 },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(46.dp)
             ){
                 Text(
