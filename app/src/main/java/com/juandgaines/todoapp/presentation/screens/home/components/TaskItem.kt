@@ -1,4 +1,4 @@
-package com.juandgaines.todoapp.presentation.screens.home
+package com.juandgaines.todoapp.presentation.screens.home.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,7 +22,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import com.juandgaines.todoapp.domain.Category.WORK
 import com.juandgaines.todoapp.domain.Task
 import com.juandgaines.todoapp.presentation.screens.home.providers.TaskItemPreviewProvider
 import com.juandgaines.todoapp.ui.theme.TodoAppTheme

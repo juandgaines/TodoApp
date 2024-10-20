@@ -1,10 +1,8 @@
-package com.juandgaines.todoapp.presentation.screens.home
+package com.juandgaines.todoapp.presentation.screens.home.components
 
 import android.content.res.Configuration
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,7 +14,7 @@ import com.juandgaines.todoapp.ui.theme.TodoAppTheme
 
 @Composable
 fun SummaryInfo(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     date: String = "March 9, 2024",
     tasksSummary: String = "5 incomplete, 5 completed"
 ) {
