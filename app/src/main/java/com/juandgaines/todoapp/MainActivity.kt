@@ -1,24 +1,24 @@
 package com.juandgaines.todoapp
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import com.juandgaines.todoapp.data.FakeTaskLocalDataSource
+import androidx.compose.ui.unit.dp
 import com.juandgaines.todoapp.domain.Task
+import com.juandgaines.todoapp.presentation.screens.home.SectionTitle
+import com.juandgaines.todoapp.presentation.screens.home.SummaryInfo
+import com.juandgaines.todoapp.presentation.screens.home.TaskItem
 import com.juandgaines.todoapp.ui.theme.TodoAppTheme
-import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,50 +26,74 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             TodoAppTheme() {
-                val fakeDatasource = FakeTaskLocalDataSource
-
-                var text by remember { mutableStateOf("") }
-                LaunchedEffect(true) {
-
-                    launch {
-                        fakeDatasource.tasksFlow.collect {
-                            Log.d("MainActivity", "Tasks: $it")
-                            text = it.toString()
-                        }
-                    }
-
-                    launch {
-                        fakeDatasource.addTask(
-                            Task(
-                                id = "1",
-                                title = "Task 1",
-                                description = "Description 1"
-                            )
-                        )
-                        fakeDatasource.addTask(
-                            Task(
-                                id = "2",
-                                title = "Task 2",
-                                description = "Description 2"
-                            )
-                        )
-
-                        fakeDatasource.getTaskById("1")?.let {
-                            val updatedTask = it.copy(title = "Updated Task 1")
-                            fakeDatasource.updateTask(updatedTask)
-                        }
-
-                        fakeDatasource.deleteAllTasks()
-                    }
-                }
 
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Text(
-                        text = text,
-                        modifier = Modifier
-                            .padding(innerPadding)
-                            .fillMaxSize()
-                    )
+                    Column {
+                        SummaryInfo(
+                            modifier = Modifier.fillMaxWidth().padding(innerPadding),
+                            date = "March 9, 2024",
+                            tasksSummary = "5 incomplete, 5 completed"
+                        )
+                        SectionTitle(
+                            modifier = Modifier.fillMaxWidth(),
+                            title = "Completed"
+                        )
+                        Column(
+                            modifier = Modifier.fillMaxWidth().padding(16.dp).background(
+                                color = MaterialTheme.colorScheme.surfaceContainer,
+                                shape = RoundedCornerShape(16.dp)
+                            )
+                        ) {
+                            TaskItem(
+                                modifier = Modifier.padding(16.dp),
+                                onClickItem = {},
+                                onDeleteItem = {},
+                                onToggleCompletion = {},
+                                task = Task(
+                                    id = "1",
+                                    title = "Task 1",
+                                    isCompleted = false,
+                                    description = "Description 1",
+                                )
+                            )
+                            TaskItem(
+                                modifier = Modifier.padding(16.dp),
+                                onClickItem = {},
+                                onDeleteItem = {},
+                                onToggleCompletion = {},
+                                task = Task(
+                                    id = "1",
+                                    title = "Task 1",
+                                    isCompleted = false,
+                                    description = "Description 1",
+                                )
+                            )
+                        }
+                        SectionTitle(
+                            modifier = Modifier.fillMaxWidth(),
+                            title = "Uncompleted"
+                        )
+                        Column(
+                            modifier = Modifier.fillMaxWidth().padding(16.dp).background(
+                                color = MaterialTheme.colorScheme.surfaceContainer,
+                                shape = RoundedCornerShape(16.dp)
+                            )
+                        ) {
+                            TaskItem(
+                                modifier = Modifier.padding(16.dp),
+                                onClickItem = {},
+                                onDeleteItem = {},
+                                onToggleCompletion = {},
+                                task = Task(
+                                    id = "1",
+                                    title = "Task 1",
+                                    isCompleted = true,
+                                    description = "Description 1",
+                                )
+                            )
+                        }
+
+                    }
                 }
             }
         }
