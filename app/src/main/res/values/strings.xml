@@ -13,4 +13,5 @@
   <string name="done">Completed:</string>
   <string name="category">Category</string>
   <string name="save">Save</string>
+  <string name="task_created">Task saved</string>
 </resources>
