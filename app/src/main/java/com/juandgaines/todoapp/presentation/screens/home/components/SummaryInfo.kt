@@ -53,10 +53,12 @@ fun SummaryInfo(
     }
 
     Row(
+        modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(
-            modifier = modifier
+            modifier = Modifier
+                .weight(1.5f)
                 .padding(16.dp)
         ) {
             Text(
@@ -77,6 +79,7 @@ fun SummaryInfo(
             modifier = Modifier
                 .padding(16.dp)
                 .aspectRatio(1f)
+                .weight(1f)
         ) {
             val colorBase = MaterialTheme.colorScheme.inversePrimary
             val progress = MaterialTheme.colorScheme.primary

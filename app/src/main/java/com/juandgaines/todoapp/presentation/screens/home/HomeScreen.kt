@@ -146,7 +146,7 @@ fun HomeScreen(
                 item {
                     SummaryInfo(
                         date = state.date,
-                        tasksSummary = state.summary,
+                        tasksSummary = stringResource(R.string.summary, state.summary),
                         completedTasks = state.completedTask.size,
                         totalTask = state.completedTask.size + state.pendingTask.size
                     )
