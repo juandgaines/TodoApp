@@ -136,6 +136,7 @@ fun HomeScreen(
                                     )
                                 },
                                 onClick = {
+                                    isMenuExtended = false
                                     onAction(HomeScreenAction.OnDeleteAllTasks)
                                 }
                             )
@@ -147,92 +148,105 @@ fun HomeScreen(
         },
         content = { paddingValues ->
 
-            LazyColumn (
-                modifier = Modifier
-                    .padding(paddingValues = paddingValues)
-                    .padding(horizontal = 16.dp),
-                verticalArrangement = Arrangement.spacedBy(
-                    8.dp
-                )
-            ){
-                item {
-                    SummaryInfo(
-                        date = state.date,
-                        tasksSummary = stringResource(R.string.summary, state.summary),
-                        completedTasks = state.completedTask.size,
-                        totalTask = state.completedTask.size + state.pendingTask.size
+            if (state.completedTask.isEmpty() && state.pendingTask.isEmpty()){
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = androidx.compose.ui.Alignment.Center
+                ){
+                    Text(
+                        text = stringResource(R.string.no_tasks),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        style = MaterialTheme.typography.bodyLarge
                     )
                 }
-
-                stickyHeader{
-                    SectionTitle(
-                        modifier = Modifier
-                            .background(
-                                color = MaterialTheme.colorScheme.surface
-                            )
-                            .fillParentMaxWidth(),
-                        title = stringResource(R.string.pending_tasks)
+            }
+            else {
+                LazyColumn(
+                    modifier = Modifier
+                        .padding(paddingValues = paddingValues)
+                        .padding(horizontal = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(
+                        8.dp
                     )
+                ) {
+                    item {
+                        SummaryInfo(
+                            date = state.date,
+                            tasksSummary = stringResource(R.string.summary, state.summary),
+                            completedTasks = state.completedTask.size,
+                            totalTask = state.completedTask.size + state.pendingTask.size
+                        )
+                    }
+
+                    stickyHeader {
+                        SectionTitle(
+                            modifier = Modifier
+                                .background(
+                                    color = MaterialTheme.colorScheme.surface
+                                )
+                                .fillParentMaxWidth(),
+                            title = stringResource(R.string.pending_tasks)
+                        )
+                    }
+
+                    items(
+                        items = state.pendingTask,
+                        key = { task -> task.id }
+                    ) { task ->
+                        TaskItem(
+                            modifier = Modifier
+                                .clip(
+                                    RoundedCornerShape(8.dp)
+                                )
+                                .animateItem(),
+                            task = task,
+                            onClickItem = {
+                                onAction(HomeScreenAction.OnClickTask(task.id))
+                            },
+                            onDeleteItem = {
+                                onAction(HomeScreenAction.OnDeleteTask(task))
+                            },
+                            onToggleCompletion = {
+                                onAction(HomeScreenAction.OnToggleTask(it))
+                            }
+                        )
+                    }
+
+                    stickyHeader {
+                        SectionTitle(
+                            modifier = Modifier
+                                .fillParentMaxWidth()
+                                .background(
+                                    color = MaterialTheme.colorScheme.surface
+                                ),
+                            title = stringResource(R.string.completed_tasks)
+                        )
+                    }
+
+                    items(
+                        items = state.completedTask,
+                        key = { task -> task.id }
+                    ) { task ->
+                        TaskItem(
+                            modifier = Modifier
+                                .clip(
+                                    RoundedCornerShape(8.dp)
+                                )
+                                .animateItem(),
+                            task = task,
+                            onClickItem = {
+                                onAction(HomeScreenAction.OnClickTask(task.id))
+                            },
+                            onDeleteItem = {
+                                onAction(HomeScreenAction.OnDeleteTask(task))
+                            },
+                            onToggleCompletion = {
+                                onAction(HomeScreenAction.OnToggleTask(it))
+                            }
+                        )
+                    }
+
                 }
-
-                items(
-                    items = state.pendingTask,
-                    key = { task -> task.id }
-                ){ task ->
-                    TaskItem(
-                        modifier = Modifier
-                            .clip(
-                                RoundedCornerShape(8.dp)
-                            )
-                            .animateItem(),
-                        task = task,
-                        onClickItem = {
-                            onAction(HomeScreenAction.OnClickTask(task.id))
-                        },
-                        onDeleteItem = {
-                            onAction(HomeScreenAction.OnDeleteTask(task))
-                        },
-                        onToggleCompletion = {
-                            onAction(HomeScreenAction.OnToggleTask(it))
-                        }
-                    )
-                }
-
-                stickyHeader{
-                    SectionTitle(
-                        modifier = Modifier
-                            .fillParentMaxWidth()
-                            .background(
-                                color = MaterialTheme.colorScheme.surface
-                            ),
-                        title = stringResource(R.string.completed_tasks)
-                    )
-                }
-
-                items(
-                    items = state.completedTask,
-                    key = { task -> task.id }
-                ){ task ->
-                    TaskItem(
-                        modifier = Modifier
-                            .clip(
-                                RoundedCornerShape(8.dp)
-                            )
-                            .animateItem(),
-                        task = task,
-                        onClickItem = {
-                            onAction(HomeScreenAction.OnClickTask(task.id))
-                        },
-                        onDeleteItem = {
-                            onAction(HomeScreenAction.OnDeleteTask(task))
-                        },
-                        onToggleCompletion = {
-                            onAction(HomeScreenAction.OnToggleTask(it))
-                        }
-                    )
-                }
-
-
             }
         },
         floatingActionButton = {

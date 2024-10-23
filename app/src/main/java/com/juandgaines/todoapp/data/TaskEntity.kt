@@ -3,6 +3,7 @@ package com.juandgaines.todoapp.data
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.juandgaines.todoapp.domain.Category
 import com.juandgaines.todoapp.domain.Task
 import java.time.Instant
 import java.time.LocalDateTime
@@ -14,6 +15,7 @@ data class TaskEntity(
     val id: String,
     val title: String,
     val description: String?,
+    val category: Int?,
     @ColumnInfo(name = "is_completed")
     val isCompleted: Boolean,
     val date: Long,
@@ -25,6 +27,7 @@ data class TaskEntity(
                 title = task.title,
                 description = task.description,
                 isCompleted = task.isCompleted,
+                category = task.category?.ordinal,
                 date = task.date
                     .atZone(
                         ZoneId.systemDefault()
@@ -40,6 +43,7 @@ data class TaskEntity(
             title = title,
             description = description,
             isCompleted = isCompleted,
+            category = category?.let { Category.fromOrdinal(it) },
             date = LocalDateTime.ofInstant(
                 Instant.ofEpochMilli(date),
                 ZoneId.systemDefault()

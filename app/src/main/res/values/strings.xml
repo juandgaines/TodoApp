@@ -14,4 +14,5 @@
   <string name="category">Category</string>
   <string name="save">Save</string>
   <string name="task_created">Task saved</string>
+  <string name="no_tasks">No task has been created.</string>
 </resources>

@@ -5,4 +5,10 @@ enum class Category {
     PERSONAL,
     SHOPPING,
     OTHER;
+
+   companion object {
+        fun fromOrdinal(ordinal: Int): Category? {
+            return entries.find { it.ordinal == ordinal }
+        }
+    }
 }
