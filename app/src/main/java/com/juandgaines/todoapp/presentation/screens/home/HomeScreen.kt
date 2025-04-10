@@ -35,6 +35,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -98,7 +100,9 @@ fun HomeScreen(
     var isMenuExtended by remember { mutableStateOf(false) }
 
     Scaffold(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier
+            .fillMaxSize()
+            .semantics { contentDescription = "Home Screen" },
         topBar = {
             TopAppBar(
                 title = {
@@ -115,10 +119,11 @@ fun HomeScreen(
                             .clickable {
                                 isMenuExtended = true
                             }
+                            .semantics { contentDescription = "More Options Menu" }
                     ){
                         Icon(
                             imageVector = Icons.Default.MoreVert,
-                            contentDescription = "Add Task",
+                            contentDescription = "More Options",
                             tint = MaterialTheme.colorScheme.onSurface,
                         )
                         DropdownMenu(
@@ -143,11 +148,9 @@ fun HomeScreen(
                         }
                     }
                 }
-
             )
         },
         content = { paddingValues ->
-
             if (state.completedTask.isEmpty() && state.pendingTask.isEmpty()){
                 Box(
                     modifier = Modifier.fillMaxSize(),
@@ -156,7 +159,8 @@ fun HomeScreen(
                     Text(
                         text = stringResource(R.string.no_tasks),
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        style = MaterialTheme.typography.bodyLarge
+                        style = MaterialTheme.typography.bodyLarge,
+                        modifier = Modifier.semantics { contentDescription = "Empty Tasks State" }
                     )
                 }
             }
@@ -165,9 +169,7 @@ fun HomeScreen(
                     modifier = Modifier
                         .padding(paddingValues = paddingValues)
                         .padding(horizontal = 16.dp),
-                    verticalArrangement = Arrangement.spacedBy(
-                        8.dp
-                    )
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     item {
                         SummaryInfo(
@@ -198,7 +200,8 @@ fun HomeScreen(
                                 .clip(
                                     RoundedCornerShape(8.dp)
                                 )
-                                .animateItem(),
+                                .animateItem()
+                                .semantics { contentDescription = "Pending Task: ${task.title}" },
                             task = task,
                             onClickItem = {
                                 onAction(HomeScreenAction.OnClickTask(task.id))
@@ -232,7 +235,8 @@ fun HomeScreen(
                                 .clip(
                                     RoundedCornerShape(8.dp)
                                 )
-                                .animateItem(),
+                                .animateItem()
+                                .semantics { contentDescription = "Completed Task: ${task.title}" },
                             task = task,
                             onClickItem = {
                                 onAction(HomeScreenAction.OnClickTask(task.id))
@@ -245,7 +249,6 @@ fun HomeScreen(
                             }
                         )
                     }
-
                 }
             }
         },
@@ -253,9 +256,13 @@ fun HomeScreen(
             FloatingActionButton(
                 onClick = {
                     onAction(HomeScreenAction.OnAddTask)
-                }
+                },
+                modifier = Modifier.semantics { contentDescription = "Add New Task Button" }
             ) {
-                Icon(imageVector = Icons.Default.Add, contentDescription = "Add Task")
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = "Add Task"
+                )
             }
         }
     )

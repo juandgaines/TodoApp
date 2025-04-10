@@ -42,6 +42,8 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -107,6 +109,7 @@ fun TaskScreen(
     }
 
     Scaffold (
+        modifier = modifier.semantics { contentDescription = "Task Screen" },
         topBar = {
             TopAppBar(
                 title = {
@@ -120,26 +123,25 @@ fun TaskScreen(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "Back",
                         tint = MaterialTheme.colorScheme.onBackground,
-                        modifier = Modifier.clickable {
-                            onAction(
-                                ActionTask.Back
-                            )
-                        }
+                        modifier = Modifier
+                            .clickable {
+                                onAction(
+                                    ActionTask.Back
+                                )
+                            }
+                            .semantics { contentDescription = "Back Button" }
                     )
                 },
             )
         }
     ){ padding->
         Column (
-            verticalArrangement = Arrangement.spacedBy(
-                8.dp
-            ),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
                 .padding(horizontal = 16.dp)
                 .imePadding()
-
         ){
             Row (
                 verticalAlignment = Alignment.CenterVertically
@@ -160,6 +162,7 @@ fun TaskScreen(
                             )
                         )
                     },
+                    modifier = Modifier.semantics { contentDescription = "Task Completion Checkbox" }
                 )
                 Spacer(
                     modifier = Modifier.weight(1f)
@@ -167,11 +170,12 @@ fun TaskScreen(
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.clickable {
-                        isExpanded = true
-                    }
+                    modifier = Modifier
+                        .clickable {
+                            isExpanded = true
+                        }
+                        .semantics { contentDescription = "Category Selector" }
                 ){
-
                     Text(
                         text = state.category?.toString() ?: stringResource(R.string.category),
                         style = MaterialTheme.typography.bodyMedium.copy(
@@ -191,7 +195,7 @@ fun TaskScreen(
                     ){
                         Icon(
                             imageVector = Icons.Default.KeyboardArrowDown,
-                            contentDescription = "Add Task",
+                            contentDescription = "Select Category",
                             tint = MaterialTheme.colorScheme.onSurface,
                         )
                         DropdownMenu(
@@ -210,9 +214,7 @@ fun TaskScreen(
                                         ),
                                         modifier = Modifier
                                             .padding(8.dp)
-                                            .padding(
-                                                8.dp
-                                            )
+                                            .padding(8.dp)
                                             .clickable {
                                                 isExpanded = false
                                                 onAction(
@@ -221,14 +223,13 @@ fun TaskScreen(
                                                     )
                                                 )
                                             }
+                                            .semantics { contentDescription = "Category Option: ${category.name}" }
                                     )
                                 }
                             }
                         }
                     }
                 }
-
-
             }
 
             BasicTextField(
@@ -242,7 +243,7 @@ fun TaskScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight()
-                ,
+                    .semantics { contentDescription = "Task Title Input" },
                 decorator = { innerTextField ->
                     Column (
                         modifier = Modifier.fillMaxWidth(),
@@ -283,7 +284,8 @@ fun TaskScreen(
                     .wrapContentHeight()
                     .onFocusChanged {
                         isDescriptionFocus = it.isFocused
-                    },
+                    }
+                    .semantics { contentDescription = "Task Description Input" },
                 decorator = { innerTextField ->
                     Column {
                         if(state.taskDescription.text.toString().isEmpty() && !isDescriptionFocus){
@@ -304,7 +306,6 @@ fun TaskScreen(
                 modifier = Modifier.weight(1f)
             )
 
-
             Button(
                 enabled = state.canSaveTask,
                 onClick = {
@@ -315,6 +316,7 @@ fun TaskScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(46.dp)
+                    .semantics { contentDescription = "Save Task Button" }
             ){
                 Text(
                     text = stringResource(R.string.save),
